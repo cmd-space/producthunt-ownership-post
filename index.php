@@ -7,11 +7,6 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<link rel="stylesheet" href="css/style.css">
 		<title>ProductHunt Ownership Post Data Design</title>
-		<script>
-			window.onload = function() {
-				alert("Davie,")
-			}
-		</script>
 	</head>
 	<body>
 		<header>
