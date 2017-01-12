@@ -7,6 +7,11 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<link rel="stylesheet" href="css/style.css">
 		<title>ProductHunt Ownership Post Data Design</title>
+		<script>
+			window.onload = function() {
+				alert("Davie,")
+			}
+		</script>
 	</head>
 	<body>
 		<header>
@@ -18,7 +23,7 @@
 			<p><span>Age:</span> 24</p>
 			<p><span>Gender:</span> Male</p>
 			<p><span>Occupation:</span> Entrepreneur</p>
-			<p><span>Technology:</span> iPhone & Macbook Pro (which he is using to post his app on ProductHunt)</p>
+			<p><span>Technology:</span> iPhone 7 & Macbook Pro running OS X Sierra (which he is using to post his app on ProductHunt)</p>
 			<p><span>Needs:</span> Web developer and entrepreneur who is using ProductHunt as a way to get the word out about his fledgling web app, in hopes that his web app will get enough attention to be highlighted on the front page and in ProductHunt's daily e-mail to thousands upon thousands of e-mail subscribers. Without a marketing budget Rafael knows that social proof on ProductHunt is a major milestone that needs to be accomplished for his new app to grow rapidly without spending money on advertising.</p>
 			<p><span>Goals:</span> Rafael has been actively participating on ProductHunt the entire time he has been creating his app MVP. He knows that having an established reputation and some solid connections on PH will help his app get in front of more eyes than it would without actively participating, because he knows that PH is a tight knit community of like-minded makers, entrepreneurs and developers. He also is constantly on the lookout for apps similar to his own to compare features and read feedback from community members.</p>
 			<h2>Use Case</h2>
@@ -44,10 +49,12 @@
 			<ul>
 				<li>One user can add many posts</li>
 				<li>One post has one owner</li>
-				<li>One post can have many user makers</li>
-				<li>One user maker can have many posts</li>
-				<li>One post can have many comments</li>
-				<li>One post has many required fields</li>
+				<li>One post can have many makers</li>
+				<li>One post can have many images</li>
+				<li>One post has one thumbnail image</li>
+				<li>One post has many topics</li>
+				<li>One post has one category</li>
+
 			</ul>
 		</main>
 	</body>
