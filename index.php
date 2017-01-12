@@ -42,15 +42,33 @@
 			</ol>
 			<h2>Conceptual Model</h2>
 			<ul>
-				<li>One user can add many posts</li>
-				<li>One post has one owner</li>
+				<li>One user can have many posts</li>
+				<li>One post can have one owner</li>
 				<li>One post can have many makers</li>
 				<li>One post can have many images</li>
-				<li>One post has one thumbnail image</li>
-				<li>One post has many topics</li>
-				<li>One post has one category</li>
-
+				<li>One post can have one thumbnail image</li>
+				<li>One post can have many topics</li>
+				<li>One post can have one category</li>
 			</ul>
+			<h2>Entities & Relationships</h2>
+			<table>
+				<tr>
+					<th>Profile</th>
+					<th>Post</th>
+				</tr>
+				<tr>
+					<td>profileEmail (primary key)</td>
+					<td>postProfile (foreign key)</td>
+				</tr>
+				<tr>
+					<td>profileTagName</td>
+					<td>postTopics</td>
+				</tr>
+				<tr>
+					<td>profileFirstName</td>
+					<td>postURL</td>
+				</tr>
+			</table>
 		</main>
 	</body>
 </html>
