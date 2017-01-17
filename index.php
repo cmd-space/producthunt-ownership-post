@@ -57,12 +57,12 @@
 					<th>Post</th>
 				</tr>
 				<tr>
-					<td>profileEmail</td>
-					<td>postProfile (foreign key)</td>
+					<td>profileId</td>
+					<td>postId</td>
 				</tr>
 				<tr>
-					<td>profileTagName</td>
-					<td>postTopics</td>
+					<td>profileEmail</td>
+					<td>postProfileId</td>
 				</tr>
 				<tr>
 					<td>profileFirstName</td>
@@ -81,8 +81,8 @@
 					<td>postCreatedTimestamp</td>
 				</tr>
 				<tr>
-					<td>profileNumber</td>
-					<td>postGalleryImages</td>
+					<td></td>
+					<td>postGalleryImage</td>
 				</tr>
 			</table>
 			<img src="images/producthunt-ownership-post.svg" alt="ERD diagram for DDL project">
