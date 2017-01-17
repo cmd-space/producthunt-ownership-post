@@ -5,3 +5,14 @@ span {
 p {
 	line-height: 1.3em;
 }
+
+/*table {*/
+	/*border-collapse: collapse;*/
+/*}*/
+
+table tr {
+	border-collapse: collapse;
+	border-right-style: ridge;
+	padding: .4em 1em;
+	text-align: left;
+}

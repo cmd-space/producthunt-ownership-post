@@ -57,7 +57,7 @@
 					<th>Post</th>
 				</tr>
 				<tr>
-					<td>profileEmail (primary key)</td>
+					<td>profileEmail</td>
 					<td>postProfile (foreign key)</td>
 				</tr>
 				<tr>
@@ -67,6 +67,22 @@
 				<tr>
 					<td>profileFirstName</td>
 					<td>postURL</td>
+				</tr>
+				<tr>
+					<td>profileLastName</td>
+					<td>postProductName</td>
+				</tr>
+				<tr>
+					<td>profileAvatarImage</td>
+					<td>postThumbnailImage</td>
+				</tr>
+				<tr>
+					<td>profileCreatedTimestamp</td>
+					<td>postCreatedTimestamp</td>
+				</tr>
+				<tr>
+					<td>profileNumber</td>
+					<td>postGalleryImages</td>
 				</tr>
 			</table>
 		</main>
