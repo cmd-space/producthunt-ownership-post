@@ -85,6 +85,7 @@
 					<td>postGalleryImages</td>
 				</tr>
 			</table>
+			<img src="images/Data%20Design%20Project%20-%20DDCBC.svg" alt="ERD diagram for DDL project">
 		</main>
 	</body>
 </html>
