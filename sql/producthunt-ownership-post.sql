@@ -7,7 +7,7 @@ CREATE TABLE profile (
 	-- auto_increment tells mySQL to number them {1, 2, 3, ...}
 	-- not null means the attribute is required!
 	profileId INT UNSIGNED AUTO_INCREMENT NOT NULL,
-	profileAvatarImage VARCHAR,
+	profileAvatarImage VARCHAR(255),
 	profileCreatedTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	profileEmail VARCHAR(128) NOT NULL,
 	profileFirstName VARCHAR(32) NOT NULL,
@@ -27,10 +27,10 @@ CREATE TABLE post (
 	postProfileId INT UNSIGNED NOT NULL,
 	postCreatedTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	-- notice dates don't need a size parameter
-	postGalleryImage VARCHAR,
+	postGalleryImage VARCHAR(255),
 	postProductName VARCHAR(140),
-	postThumbnailImage VARCHAR,
-	postUrl VARCHAR,
+	postThumbnailImage VARCHAR(255),
+	postUrl VARCHAR(255),
 	-- this creates an index before making a foreign key
 	INDEX(postProfileId),
 	-- this creates the actual foreign key relation
