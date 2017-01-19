@@ -73,7 +73,7 @@ class Profile {
 	}
 
 	/**
-	 * accessor method for profileAvatarImage
+	 * accessor method for profile avatar image
 	 *
 	 * @return string value of profile avatar image
 	 **/
@@ -82,7 +82,7 @@ class Profile {
 	}
 
 	/**
-	 * mutator method for profileAvatarImage
+	 * mutator method for profile avatar image
 	 *
 	 * @param string $newProfileAvatarImage new value of profile avatar image
 	 * @throws \InvalidArgumentException if $newProfileAvatarImage is insecure or not expected
@@ -98,5 +98,38 @@ class Profile {
 
 		// store the profile avatar image
 		$this->profileAvatarImage = $newProfileAvatarImage;
+	}
+
+	/**
+	 * accessor method for profile created timestamp
+	 *
+	 * @return \DateTime value of profile created timestamp
+	 **/
+	public function getProfileCreatedTimestamp() {
+		return($this->tweetDate);
+	}
+
+	/**
+	 * mutator method for profile created timestamp
+	 *
+	 * @param \DateTime|string|null $newProfileCreatedTimestamp profile created timestamp as a DateTime object or string (or null to load the current time)
+	 * @throws \InvalidArgumentException if $newProfileCreatedTimestamp is not a valid object or string
+	 * @throws \RangeException if $newProfileCreatedTimestamp is a date that does not exist
+	 **/
+	public function setProfileCreatedTimestamp($newProfileCreatedTimestamp = null) {
+		if($newProfileCreatedTimestamp === null) {
+			$this->profileCreatedTimestamp = new \DateTime();
+			return;
+		}
+
+		// store the profile created timestamp
+		try {
+			$newProfileCreatedTimestamp = self::validateDateTime($newProfileCreatedTimestamp);
+		} catch(\InvalidArgumentException $invalidArgument) {
+			throw(new \InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(\RangeException $range) {
+			throw(new \RangeException($range->getMessage(), 0, $range));
+		}
+		$this->profileCreatedTimestamp = $newProfileCreatedTimestamp;
 	}
 }
