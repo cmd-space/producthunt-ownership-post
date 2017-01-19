@@ -272,4 +272,30 @@ class Profile {
 		// store thew profile last name
 		$this->profileLastName = $newProfileLastName;
 	}
+
+	/**
+	 * inserts this profile into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo) {
+		// enforce the ProfileId is null (i.e., don't insert a profile that already exists)
+		if($this->profileId !== null) {
+			throw(new \PDOException("not a new profile"));
+		}
+
+		// create query template
+		$query = "INSERT INTO profile(profileAvatarImage, profileCreatedTimestamp, profileEmail, profileFirstName, profileLastName) VALUES(:profileAvatarImage, :profileCreatedTimeStamp :profileEmail, :profileFirstName, :profileLastName)";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$formattedDate = $this->profileCreatedTimestamp->format("Y-m-d H:i:s");
+		$parameters = ["profileAvatarImage" => $this->profileAvatarImage, "profileCreatedTimestamp" => $this->$formattedDate, "profileEmail" => $this->profileEmail, "profileFirstName" => $this->profileFirstName, "profileLastName" => $this->profileLastName];
+		$statement->execute($parameters);
+
+		// update the null profileId with what mySQL just gave us
+		$this->profileId = intval($pdo->lastInsertId());
+	}
 }
