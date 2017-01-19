@@ -106,7 +106,7 @@ class Profile {
 	 * @return \DateTime value of profile created timestamp
 	 **/
 	public function getProfileCreatedTimestamp() {
-		return($this->tweetDate);
+		return($this->profileCreatedTimestamp);
 	}
 
 	/**
@@ -199,5 +199,39 @@ class Profile {
 
 		// store the profile first name content
 		$this->profileFirstName = $newProfileFirstName;
+	}
+
+	/**
+	 * accessor method for profile last name
+	 *
+	 * @return string value of profile last name
+	 **/
+	public function getProfileLastName() {
+		return($this->profileLastName);
+	}
+
+	/**
+	 * mutator method for profile last name
+	 *
+	 * @param string $newProfileLastName new value for profile last name
+	 * @throws \InvalidArgumentException if $newProfileLastName is not secure or is unexpected
+	 * @throws \RangeException if $newProfileLastName is > 32 characters
+	 * @throws \TypeError if $newProfileLastName is not a string
+	 **/
+	public function setProfileLastName(string $newProfileLastName) {
+		// verify the profile last name content is secure
+		$newProfileLastName = trim($newProfileLastName);
+		$newProfileLastName = filter_var($newProfileLastName, FILTER_SANITIZE_STRING);
+		if(empty($newProfileLastName) === true) {
+			throw(new \InvalidArgumentException("profile last name content is empty or insecure"));
+		}
+
+		// verify the profile last name content will fit in database
+		if(strlen($newProfileLastName) > 32) {
+			throw(new \RangeException("profile last name content too large"));
+		}
+
+		// store thew profile last name
+		$this->profileLastName = $newProfileLastName;
 	}
 }
