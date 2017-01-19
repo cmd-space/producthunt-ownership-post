@@ -36,8 +36,8 @@ trait ValidateDate {
 	 *
 	 * Converts a string to a DateTime object or false if invalid. This is designed to be used within a mutator method
 	 *
-	 * @param mixed $newTime date to validate
-	 * @return \DateTime DateTime object containing the validated date
+	 * @param string $newTime date to validate
+	 * @return string validated time as a string H:i:s
 	 * @see http://php.net/manual/en/class.datetime.php PHP's DateTime class
 	 * @throws \InvalidArgumentException if the date is in an invalid format
 	 * @throws \RangeException if the date is not a Gregorian date
@@ -69,7 +69,7 @@ trait ValidateDate {
 	 * Converts a string to a DateTime object or false if invalid. This is designed to be used within a mutator method
 	 *
 	 * @param mixed $newDateTime date to validate
-	 * @return string validated time as a string H:i:s
+	 * @return \DateTime DateTime object containing the validated date
 	 * @see http://php.net/manual/en/class.datetime.php PHP's DateTime class
 	 * @throws \InvalidArgumentException if the date is in an invalid format
 	 * @throws \RangeException if the date is not a Gregorian date
