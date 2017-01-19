@@ -167,5 +167,37 @@ class Profile {
 		$this->profileEmail = $newProfileEmail;
 	}
 
+	/**
+	 * accessor method for profile first name
+	 *
+	 * @return string value of profile first name
+	 **/
+	public function getProfileFirstName() {
+		return($this->profileFirstName);
+	}
 
+	/**
+	 * mutator method for profile first name
+	 *
+	 * @param string $newProfileFirstName new value of profile first name
+	 * @throws \InvalidArgumentException if $newProfileFirstName is not secure or unexpected
+	 * @throws \RangeException if $newProfileFirstName is > 32 characters
+	 * @throws \TypeError if $newProfileFirstName is not a string
+	 **/
+	public function setProfileFirstName(string $newProfileFirstName) {
+		// verify the profile first name is secure
+		$newProfileFirstName = trim($newProfileFirstName);
+		$newProfileFirstName = filter_var($newProfileFirstName, FILTER_SANITIZE_STRING);
+		if(empty($newProfileFirstName) === true) {
+			throw(new \InvalidArgumentException("profile first name is empty or insecure"));
+		}
+
+		// verify the profile first name content will fit in the database
+		if(strlen($newProfileFirstName) > 32) {
+			throw(new \RangeException("profile first name too large"));
+		}
+
+		// store the profile first name content
+		$this->profileFirstName = $newProfileFirstName;
+	}
 }
