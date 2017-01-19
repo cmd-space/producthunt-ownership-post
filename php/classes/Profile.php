@@ -58,6 +58,45 @@ class Profile {
 	 **/
 	public function setProfileId(int $newProfileId = null) {
 		// base case: if the profile id is null, this is a new profile without a mySQL assigned id (yet)
+		if($newProfileId === null) {
+			$this->profileId = null;
+			return;
+		}
 
+		// verify the profile id is positive
+		if($newProfileId <= 0) {
+			throw(new \RangeException("profile id is not positive"));
+		}
+
+		// convert and store the profile id
+		$this->profileId = $newProfileId;
+	}
+
+	/**
+	 * accessor method for profileAvatarImage
+	 *
+	 * @return string value of profile avatar image
+	 **/
+	public function getProfileAvatarImage() {
+		return($this->profileAvatarImage);
+	}
+
+	/**
+	 * mutator method for profileAvatarImage
+	 *
+	 * @param string $newProfileAvatarImage new value of profile avatar image
+	 * @throws \InvalidArgumentException if $newProfileAvatarImage is insecure or not expected
+	 * @throws \TypeError if $newProfileAvatarImage is not a string
+	 **/
+	public function setProfileAvatarImage(string $newProfileAvatarImage) {
+		// verify the profile avatar image is secure
+		$newProfileAvatarImage = trim($newProfileAvatarImage);
+		$newProfileAvatarImage = filter_var($newProfileAvatarImage, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileAvatarImage) === true) {
+			throw(new \InvalidArgumentException("avatar image is empty or insecure"));
+		}
+
+		// store the profile avatar image
+		$this->profileAvatarImage = $newProfileAvatarImage;
 	}
 }
