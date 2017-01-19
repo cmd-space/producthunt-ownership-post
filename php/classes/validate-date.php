@@ -82,5 +82,24 @@ trait ValidateDate {
 	 * @throws \InvalidArgumentException if the date is in an invalid format
 	 * @throws \RangeException if the date is not a Gregorian date
 	 **/
+	private static function validateTime($newTime) {
+		// treat the date as a mySQL date string: H:i:s
+		$newTime = trim($newTime);
+		if((preg_match("/^(\d{2}):(\d{2}):(\d{2})$/", $newTime, $matches)) !== 1) {
+			throw(new \InvalidArgumentException("time is not a valid time"));
+		}
 
+		// verify the date is really a valid calendar date
+		$hour = intval($matches[1]);
+		$minute = intval($matches[2]);
+		$second = intval($matches[3]);
+
+		// verify the time is really a valid wall clock time
+		if($hour < 0 || $hour >= 24 || $minute < 0 || $minute >= 60 || $second < 0 || $second >= 60) {
+			throw(new \RangeException("date is not a valid wall clock time"));
+		}
+
+		// if we got here, the date is clean
+		return($newTime);
+	}
 }
