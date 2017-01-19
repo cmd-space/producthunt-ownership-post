@@ -42,6 +42,29 @@ class Profile {
 	private $profileLastName;
 
 	/**
+	 * constructor for this profile
+	 *
+	 * @param int|null $newProfileId id of this profile or null if a new profile
+	 * @param string $newProfileAvatarImage string containing profile avatar image
+	 * @param \DateTime|string|null $newProfileCreatedTimestamp date and time profile was created or null if set to current date and time
+	 * @param string $newProfileEmail email of this profile
+	 * @param string $newProfileFirstName first name of this profile
+	 * @param string $newProfileLastName last name of this profile
+	 * @throws \InvalidArgumentException if data types are not valid
+	 * @throws \RangeException if data values are out of bounds (i.e. strings too long, or negative integers)
+	 * @throws \TypeError if data types violate type hints
+	 * @throws \Exception if some other exception occurs
+	 **/
+	public function __construct(int $newProfileId = null, string $newProfileAvatarImage, DateTime $newProfileCreatedTimestamp = null, string $newProfileEmail, string $newProfileFirstName, string $newProfileLastName) {
+		try {
+			$this->setProfileId($newProfileId);
+			$this->setProfileAvatarImage($newProfileAvatarImage);
+			$this->setProfileCreatedTimestamp($newProfileCreatedTimestamp);
+			$this->setProfileEmail($newProfileEmail);
+		}
+	}
+
+	/**
 	 * accessor method for profile id
 	 *
 	 * @return int|null value of profile id
