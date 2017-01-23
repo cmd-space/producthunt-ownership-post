@@ -403,7 +403,67 @@ class Profile implements \JsonSerializable {
 
 		//create query template
 		$query = "SELECT profileId, profileAvatarImage, profileCreatedTimestamp, profileEmail, profileFirstName, profileLastName FROM profile WHERE profileId = :profileId";
-		$statement->prepare($query);
+		$statement = $pdo->prepare($query);
+
+		//bind the profile id to the placeholder in the template
+		$parameters = ["profileId" => $profileId];
+		$statement->execute($parameters);
+
+		//grab the profile from mySQL
+		try {
+			$profile = null;
+			$statement->setFetchMode( \PDO::FETCH_ASSOC );
+			$row = $statement->fetch();
+			if ( $row !== false ) {
+				$profile = new Profile( $row["profileId"], $row["profileAvatarImage"], $row["profileCreatedTimestamp"], $row["profileEmail"], $row["profileFirstName"], $row["profileLastName"] );
+			}
+		} catch(\Exception $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		return($profile);
+		}
+
+	/**
+	 * gets the profile by profile first name
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $profileFirstName profile first name to search by
+	 * @return \SplFixedArray SplFixedArray of profile(s) found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getProfileByProfileFirstName(\PDO $pdo, string $profileFirstName) {
+		//sanitize the name before searching
+		$profileFirstName = trim($profileFirstName);
+		$profileFirstName = filter_var($profileFirstName, FILTER_SANITIZE_STRING);
+		if(empty($profileFirstName) === true) {
+			throw(new \PDOException("profile first name is invalid"));
+		}
+
+		//create query template
+		$query = "SELECT profileId, profileAvatarImage, profileCreatedTimestamp, profileEmail, profileFirstName, profileLastName FROM profile WHERE profileFirstName LIKE :profileFirstName";
+		$statement = $pdo->prepare($query);
+
+		//bind the profile first name to the placeholder in the template
+		$profileFirstName = "%$profileFirstName%";
+		$parameters = ["profileFirstName" => $profileFirstName];
+		$statement->execute($parameters);
+
+		//build an array of profile(s)
+		$profiles = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$profile = new Profile($row["profileId"], $row["profileAvatarImage"], $row["profileCreatedTimestamp"], $row["profileEmail"], $row["profileFirstName"], $row["profileLastName"]);
+				$profiles[$profiles->key()] = $profile;
+				$profiles->next();
+			} catch(\Exception $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($profiles);
 	}
 
 	/**
