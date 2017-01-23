@@ -8,7 +8,7 @@
  * @author Mason Crane <cmd-space.com>
  * @version 1.0.0
  **/
-class Profile {
+class Profile implements \JsonSerializable {
 	use ValidateDate;
 	/**
 	 * id for this profile
@@ -287,7 +287,7 @@ class Profile {
 		}
 
 		// create query template
-		$query = "INSERT INTO profile(profileAvatarImage, profileCreatedTimestamp, profileEmail, profileFirstName, profileLastName) VALUES(:profileAvatarImage, :profileCreatedTimeStamp :profileEmail, :profileFirstName, :profileLastName)";
+		$query = "INSERT INTO profile(profileAvatarImage, profileCreatedTimestamp, profileEmail, profileFirstName, profileLastName) VALUES(:profileAvatarImage, :profileCreatedTimeStamp, :profileEmail, :profileFirstName, :profileLastName)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
@@ -307,7 +307,7 @@ class Profile {
 	 * @throws \TypeError if $pdo is not a PDO connection object
 	 **/
 	public function delete(\PDO $pdo) {
-		// enforce the profileId is not null (i.e., don't delete a profile that hasn't been inserted
+		// enforce the profileId is not null (i.e., don't delete a profile that hasn't been inserted)
 		if($this->profileId === null) {
 			throw(new \PDOException("unable to delete a profile that does not exist"));
 		}
@@ -328,4 +328,92 @@ class Profile {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError if $pdo is not a PDO connection object
 	 **/
+	public function update(\PDO $pdo) {
+		// enforce the profileId is not null (i.e., don't update a profile that hasn't been inserted)
+		if($this->profileId === null) {
+			throw(new \PDOException("unable to update a profile that does not exist"));
+		}
+
+		// create query template
+		$query = "UPDATE profile SET profileAvatarImage = :profileAvatarImage, profileCreatedTimestamp = :profileCreatedTimeStamp, profileEmail = :profileEmail, profileFirstName = :profileFirstName, profileLastName = :profileLastName WHERE profileId = :profileId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$formattedDate = $this->profileCreatedTimestamp->format("Y-m-d H:i:s");
+		$parameters = ["profileAvatarImage" => $this->profileAvatarImage, "profileCreatedTimestamp" => $this->profileCreatedTimestamp, "profileEmail" => $this->profileEmail, "profileFirstName" => $this->profileFirstName, "profileLastName" => $this->profileLastName, "profileId" => $this->profileId];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * gets the profile by email
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $profileEmail profile email to search for
+	 * @return string $profileEmail profile email found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getProfileByProfileEmail(\PDO $pdo, string $profileEmail) {
+		// sanitize the description before searching
+		$profileEmail = trim($profileEmail);
+		$profileEmail = filter_var($profileEmail, FILTER_SANITIZE_EMAIL);
+		if(empty($profileEmail) === true) {
+			throw(new \PDOException("profile email is invalid"));
+		}
+
+		// create query template
+		$query = "SELECT profileId, profileAvatarImage, profileCreatedTimestamp, profileEmail, profileFirstName, profileLastName FROM profile WHERE profileEmail LIKE :profileEmail";
+		$statement = $pdo->prepare($query);
+
+		// bind the profile email to the place holder in the template
+		$profileEmail = "%$profileEmail%";
+		$parameters = ["profileEmail" => $profileEmail];
+		$statement->execute($parameters);
+
+		//build an array of profile(s)
+		$profiles = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$profile = new Profile($row["profileId"], $row["profileAvatarImage"], $row["profileCreatedTimestamp"], $row["profileEmail"], $row["profileFirstName"], $row["profileLastName"]);
+				$profiles[$profiles->key()] = $profile;
+				$profile->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($profiles);
+	}
+
+	/**
+	 * gets the profile by profileId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param int $profileId profile id to search for
+	 * @return Profile|null Profile found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getProfileByProfileId(\PDO $pdo, int $profileId) {
+		//sanitize the profileId before searching
+		if($profileId <= 0) {
+			throw(new \PDOException("profile id is not positive"));
+		}
+
+		//create query template
+		$query = "SELECT profileId, profileAvatarImage, profileCreatedTimestamp, profileEmail, profileFirstName, profileLastName FROM profile WHERE profileId = :profileId";
+		$statement->prepare($query);
+	}
+
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public function jsonSerialize() {
+		$fields = get_object_vars($this);
+		$fields["profileCreatedTimestamp"] = $this->profileCreatedTimestamp->getTimestamp() * 1000;
+		return $fields;
+	}
 }
